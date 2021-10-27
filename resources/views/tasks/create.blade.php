@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+    
 <!-- ここにページ毎のコンテンツを書く -->
      <h1>作成ページ</h1>
 
@@ -10,7 +10,7 @@
             {!! Form::model($task, ['route' => 'tasks.store']) !!}
                 
                 <div class="form-group">
-                    {!! Form::label('status', 'ステータス') !!}
+                    {!! Form::label('status', 'ステータス：') !!}
                     {!! Form::text('status', null, ['class' => 'form-control']) !!}
                 </div>
                 

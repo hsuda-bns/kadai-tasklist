@@ -50,6 +50,14 @@ class TasksController extends Controller
     // postでtasks/にアクセスされた場合の「新規登録処理」
     public function store(Request $request)
     {
+        // バリデーション　ステータス
+         $request->validate([
+            'status' => 'required|max:10',
+        ]);
+        // バリデーション　タスク内容
+        $request->validate([
+            'content' => 'required',
+        ]);
         // タスクを作成
         $task = new Task;
         $task->content = $request->content;
@@ -87,6 +95,15 @@ class TasksController extends Controller
     // getでtasks/（任意のid）/editにアクセスされた場合の「更新画面表示処理」
     public function edit($id)
     {
+        // バリデーション　ステータス
+        $request->validate([
+            'status' => 'required|max:10',
+        ]);
+        // バリデーション　タスク内容
+        $request->validate([
+            'content' => 'required',
+        ]);
+        
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
         
