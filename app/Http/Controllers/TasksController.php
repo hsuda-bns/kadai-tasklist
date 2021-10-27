@@ -95,15 +95,7 @@ class TasksController extends Controller
     // getでtasks/（任意のid）/editにアクセスされた場合の「更新画面表示処理」
     public function edit($id)
     {
-        // バリデーション　ステータス
-        $request->validate([
-            'status' => 'required|max:10',
-        ]);
-        // バリデーション　タスク内容
-        $request->validate([
-            'content' => 'required',
-        ]);
-        
+    
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
         
@@ -123,6 +115,14 @@ class TasksController extends Controller
     // putまたはpatchでtasks/（任意のid）にアクセスされた場合の「更新処理」
     public function update(Request $request, $id)
     {
+        // バリデーション　ステータス
+        $request->validate([
+            'status' => 'required|max:10',
+        ]);
+        // バリデーション　タスク内容
+        $request->validate([
+            'content' => 'required',
+        ]);
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
         
