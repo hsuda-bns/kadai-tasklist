@@ -27,7 +27,10 @@
         </table>
     @endif
     
-        {{-- メッセージ作成ページへのリンク --}}
+    {{-- ページネーションのリンク --}}
+    {{ $tasks->links() }}
+    
+    {{-- メッセージ作成ページへのリンク --}}
     {!! link_to_route('tasks.create', '作成ページ', [], ['class' => 'btn btn-primary']) !!}
 
 @endsection

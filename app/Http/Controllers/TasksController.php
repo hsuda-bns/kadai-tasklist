@@ -16,8 +16,8 @@ class TasksController extends Controller
     // getでtasks/にアクセスされた場合の「一覧表示処理」
     public function index()
     {
-        //　メッセージ一覧を取得
-        $tasks = Task::all();
+        //　メッセージ一覧を取得且つ25件ごとの表示にする
+        $tasks = Task::paginate(25);
         
         // メッセージを一覧ビューで表示
         return view('tasks.index', [
