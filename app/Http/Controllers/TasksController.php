@@ -16,15 +16,24 @@ class TasksController extends Controller
     // getでtasks/にアクセスされた場合の「一覧表示処理」
     public function index()
     {
-        //　メッセージ一覧を取得且つ25件ごとの表示にする
-        $tasks = Task::paginate(25);
-        
-        // メッセージを一覧ビューで表示
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
+        $data = [];
+        if (\Auth::check()) { //　認証済の場合
+            //　認証済ユーザを取得
+            $user = \Auth::user();
+            // ユーザのタスク一覧をidの降順で取得
+            $tasks = $user->tasks()->orderBy('id', 'desc')->paginate(10);
+            
+            // タスク一覧ビューでそれを表示
+            return view('tasks.index', [
+                'tasks' => $tasks
+            ]);
+            
+        }
+           
+        // ここに welcome のview表示[未ログインの場合]
+        return view('welcome', $data);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +44,7 @@ class TasksController extends Controller
     {
         $task = new Task;
         
-        // メッセージ作成ビューを表示
+        //　メッセージ作成ビューを表示
         return view('tasks.create', [
             'task' => $task,
         ]);
@@ -53,17 +62,14 @@ class TasksController extends Controller
         // バリデーション　ステータス
          $request->validate([
             'status' => 'required|max:10',
-        ]);
-        // バリデーション　タスク内容
-        $request->validate([
             'content' => 'required',
         ]);
-        // タスクを作成
-        $task = new Task;
-        $task->content = $request->content;
-        $task->status =$request->status; // 追加
-        $task->save();
-        
+        // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
+        $request->user()->tasks()->create([
+            'status' => $request->status,
+            'content' => $request->content,
+        ]);
+         
         // トップページへリダイレクトさせる
         return redirect('/');
     }

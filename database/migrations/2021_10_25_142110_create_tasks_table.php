@@ -15,8 +15,12 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('content'); //contentカラムを追加
             $table->timestamps();
+            
+            // 外部キー制約
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -28,5 +32,8 @@ class CreateTasksTable extends Migration
     public function down()
     {
         Schema::dropIfExists('tasks');
+        
+        //外部キーの削除
+        $table->dropForeign('tasks_user_id_foreign');
     }
 }

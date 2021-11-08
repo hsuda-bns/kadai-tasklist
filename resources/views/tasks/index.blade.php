@@ -9,7 +9,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>タスクID</th>
                     <th>ステータス</th>
                     <th>タスク</th>
                 </tr>
