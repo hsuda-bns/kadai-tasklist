@@ -19,7 +19,7 @@ Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
 
 //タスク一覧
 Route::group(['middleware' => ['auth']], function () {
-    Route::resource('tasks', 'TasksController', ['only' => ['index', 'show']]);
+    Route::resource('tasks', 'TasksController');
 });
 
 //認証

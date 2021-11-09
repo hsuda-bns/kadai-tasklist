@@ -83,13 +83,23 @@ class TasksController extends Controller
      // getでtasks/（任意のid）にアクセスされた場合の「取得表示処理」
     public function show($id)
     {
-        // idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
+        if (\Auth::check()) { //　認証済の場合
+            //　認証済ユーザを取得
+            $user = \Auth::user();
         
-        // タスク詳細ビューでそれを表示
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+            // idの値でタスクを検索して取得
+            $task = Task::findOrFail($id);
+            
+            // 認証済みユーザ本人のタスクだったらタスク詳細ビューでそれを表示
+            if (\Auth::id() === $task->user_id) {
+                return view('tasks.show', [
+                    'task' => $task,
+                ]);
+            } else {
+                // トップページへリダイレクトさせる
+                return redirect('/'); 
+            }
+        }
     }
 
     /**
@@ -105,10 +115,17 @@ class TasksController extends Controller
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
         
-        // タスク編集ビューでそれを表示
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を編集
+        if (\Auth::id() === $task->user_id) {
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+        }
+        
+        // トップページへリダイレクト
+        return redirect('/');
+        
+        
     }
 
     /**
@@ -152,8 +169,11 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
-        // メッセージを削除
-        $task->delete();
+        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        
+        }
         
         // トップページへリダイレクト
         return redirect('/');
