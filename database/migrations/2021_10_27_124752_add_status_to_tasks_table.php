@@ -14,7 +14,7 @@ class AddStatusToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->char('status', 10); //追加　カラムの最大文字数を10に設定
+            $table->string('status', 10); //追加　カラムの最大文字数を10に設定
         });
     }
 
