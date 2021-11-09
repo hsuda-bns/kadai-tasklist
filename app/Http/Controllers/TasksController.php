@@ -83,24 +83,23 @@ class TasksController extends Controller
      // getでtasks/（任意のid）にアクセスされた場合の「取得表示処理」
     public function show($id)
     {
-        if (\Auth::check()) { //　認証済の場合
-            //　認証済ユーザを取得
-            $user = \Auth::user();
+        //　認証済ユーザを取得
+        $user = \Auth::user();
         
-            // idの値でタスクを検索して取得
-            $task = Task::findOrFail($id);
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
             
-            // 認証済みユーザ本人のタスクだったらタスク詳細ビューでそれを表示
-            if (\Auth::id() === $task->user_id) {
-                return view('tasks.show', [
-                    'task' => $task,
-                ]);
-            } else {
-                // トップページへリダイレクトさせる
-                return redirect('/'); 
-            }
+        // 認証済みユーザ本人のタスクだったらタスク詳細ビューでそれを表示
+        if (\Auth::id() === $task->user_id) {
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+        } else {
+            // トップページへリダイレクトさせる
+            return redirect('/'); 
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -141,11 +140,9 @@ class TasksController extends Controller
         // バリデーション　ステータス
         $request->validate([
             'status' => 'required|max:10',
-        ]);
-        // バリデーション　タスク内容
-        $request->validate([
             'content' => 'required',
         ]);
+        
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
         
